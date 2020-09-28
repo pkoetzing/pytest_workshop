@@ -68,7 +68,7 @@ def test_mul(act, exp):
 def test_multiply_by_zero_exception():
     with pytest.raises(ValueError):
         c = Calc()
-        assert c.mul(1, 0) == 0
+        c.mul(1, 0)
 
 
 def test_divide_two_numbers():
@@ -88,3 +88,31 @@ def test_div(act, exp):
     '''Test "corner cases" of mul function'''
     c = Calc()
     assert c.div(*act) == pytest.approx(exp, rel=0.01)
+
+
+def test_average_iterable():
+    c = Calc()
+    assert c.avg([2, 5, 12, 98]) == 29.25
+
+
+def test_average_outliers():
+    c = Calc()
+    assert c.avg(
+        [2, 5, 12, 98], lower=0, upper=50) == pytest.approx(6.333, rel=0.01)
+
+
+def test_average_zero_limit():
+    c = Calc()
+    assert c.avg([-1, 0, 1], lower=0) == 0.5
+
+
+def test_average_empty_iterable():
+    c = Calc()
+    with pytest.raises(ZeroDivisionError):
+        c.avg([])
+
+
+def test_average_non_iterable():
+    c = Calc()
+    with pytest.raises(TypeError):
+        c.avg(123)

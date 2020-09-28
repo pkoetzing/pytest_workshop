@@ -24,3 +24,7 @@ class Calc():
             return res
         except ZeroDivisionError:
             return float('inf')
+
+    def avg(self, ii, lower=-float('inf'), upper=float('inf')):
+        ii = [i for i in ii if lower <= i <= upper]
+        return sum(ii) / len(ii)
