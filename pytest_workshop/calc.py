@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 class Calc():
 
     def add(self, *args):
@@ -6,3 +7,20 @@ class Calc():
 
     def sub(self, *args):
         return args[0] - sum(args[1:])
+
+    def mul(self, *args):
+        res = 1
+        for i in args:
+            res *= i
+        if not res:
+            raise(ValueError)
+        return res
+
+    def div(self, *args):
+        res = args[0]
+        try:
+            for i in args[1:]:
+                res /= i
+            return res
+        except ZeroDivisionError:
+            return float('inf')

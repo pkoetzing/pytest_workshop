@@ -34,15 +34,57 @@ def test_sub_many_numbers():
 
 
 @pytest.mark.parametrize(
-    'actual, expected',
+    'act, exp',
     [
         ((100, 90), 10),
         ((-10, -2), -8),
         ((0, -8), 8),
         ((100, 11, 7, 21), 61),
     ])
-def test_sub(actual, expected):
+def test_sub(act, exp):
     '''Test "corner cases" of sub function'''
     c = Calc()
-    act = tuple(map(int, actual))
-    assert c.sub(*act) == expected
+    assert c.sub(*act) == exp
+
+
+def test_multiply_two_numbers():
+    c = Calc()
+    assert c.mul(4, 6) == 24
+
+
+@pytest.mark.parametrize(
+    'act, exp',
+    [
+        ((4, 6), 24),
+        ((-3, -5), 15),
+        (range(1, 10), 362880)
+    ])
+def test_mul(act, exp):
+    '''Test "corner cases" of mul function'''
+    c = Calc()
+    assert c.mul(*act) == exp
+
+
+def test_multiply_by_zero_exception():
+    with pytest.raises(ValueError):
+        c = Calc()
+        assert c.mul(1, 0) == 0
+
+
+def test_divide_two_numbers():
+    c = Calc()
+    assert c.div(8, 4) == 2
+
+
+@pytest.mark.parametrize(
+    'act, exp',
+    [
+        ((11, 2), 5.5),
+        ((-9, -3), 3),
+        ((1, 3), 0.333),
+        ((100, 10, 0), float('inf')),
+    ])
+def test_div(act, exp):
+    '''Test "corner cases" of mul function'''
+    c = Calc()
+    assert c.div(*act) == pytest.approx(exp, rel=0.01)
