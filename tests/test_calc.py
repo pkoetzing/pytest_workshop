@@ -1,55 +1,48 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
-"""
-test_pytest_workshop
-----------------------------------
-
-Tests for `pytest_workshop` module.
-"""
+'''
+Tests for `calc` module.
+'''
 
 import pytest
 
-from pytest_workshop.calc import Calc
+from pytest_tdd import calc
 
 
+# Addition
 def test_add_two_numbers():
-    c = Calc()
-    assert c.add(4, 5) == 9
+    assert calc.add(4, 5) == 9
 
 
 def test_add_many_numbers():
-    c = Calc()
-    assert c.add(*range(100)) == 4950
+    assert calc.add(*range(100)) == 4950
 
 
-def test_sub_two_numbers():
-    c = Calc()
-    assert c.sub(10, 3) == 7
+@pytest.mark.parametrize(
+    'act, exp',
+    [
+        ((-10, -2), -12),
+        ((0, -8), -8),
+        ((), 0)
+    ])
+def test_add(act, exp):
+    '''Test "corner cases" of add function'''
+    assert calc.add(*act) == exp
 
-
-def test_sub_many_numbers():
-    c = Calc()
-    assert c.sub(100, 11, 7, 21) == 61
-
-
+# Subtraction
 @pytest.mark.parametrize(
     'act, exp',
     [
         ((100, 90), 10),
         ((-10, -2), -8),
         ((0, -8), 8),
-        ((100, 11, 7, 21), 61),
     ])
 def test_sub(act, exp):
     '''Test "corner cases" of sub function'''
-    c = Calc()
-    assert c.sub(*act) == exp
+    assert calc.sub(*act) == exp
 
 
+# Multiplication
 def test_multiply_two_numbers():
-    c = Calc()
-    assert c.mul(4, 6) == 24
+    assert calc.mul(4, 6) == 24
 
 
 @pytest.mark.parametrize(
@@ -61,19 +54,17 @@ def test_multiply_two_numbers():
     ])
 def test_mul(act, exp):
     '''Test "corner cases" of mul function'''
-    c = Calc()
-    assert c.mul(*act) == exp
+    assert calc.mul(*act) == exp
 
 
 def test_multiply_by_zero_exception():
     with pytest.raises(ValueError):
-        c = Calc()
-        c.mul(1, 0)
+        calc.mul(1, 0)
 
 
+# Division
 def test_divide_two_numbers():
-    c = Calc()
-    assert c.div(8, 4) == 2
+    assert calc.div(8, 4) == 2
 
 
 @pytest.mark.parametrize(
@@ -82,37 +73,33 @@ def test_divide_two_numbers():
         ((11, 2), 5.5),
         ((-9, -3), 3),
         ((1, 3), 0.333),
-        ((100, 10, 0), float('inf')),
+        ((10, 0), float('inf')),
     ])
 def test_div(act, exp):
     '''Test "corner cases" of mul function'''
-    c = Calc()
-    assert c.div(*act) == pytest.approx(exp, rel=0.01)
+    assert calc.div(*act) == pytest.approx(exp, rel=0.01)
 
 
+# Averaging
 def test_average_iterable():
-    c = Calc()
-    assert c.avg([2, 5, 12, 98]) == 29.25
+    assert calc.avg([2, 5, 12, 98]) == 29.25
 
 
 def test_average_outliers():
-    c = Calc()
-    assert c.avg(
-        [2, 5, 12, 98], lower=0, upper=50) == pytest.approx(6.333, rel=0.01)
+    assert calc.avg([2, 5, 12, 98],
+                    lower_bound=0,
+                    upper_bound=50) == pytest.approx(6.333, rel=0.01)
 
 
 def test_average_zero_limit():
-    c = Calc()
-    assert c.avg([-1, 0, 1], lower=0) == 0.5
+    assert calc.avg([-1, 0, 1], lower_bound=0) == 0.5
 
 
 def test_average_empty_iterable():
-    c = Calc()
     with pytest.raises(ZeroDivisionError):
-        c.avg([])
+        calc.avg([])
 
 
 def test_average_non_iterable():
-    c = Calc()
     with pytest.raises(TypeError):
-        c.avg(123)
+        calc.avg(123)
